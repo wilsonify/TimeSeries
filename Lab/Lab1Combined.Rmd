@@ -1,0 +1,162 @@
+---
+title: "STAT 5307 Lab 1"
+author: "Group4: Claudius Taylor, Tom Wilson, Junpu Zhao"
+date: "02SEP2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Lab 1
+
+## Using RMarkdown, generate n N(0, 1) random data. ( Do this for n = 10, 50, 100, and 1000 )
+```{r}
+x10 <- rnorm(10, 0, 1)
+x50 <- rnorm(50, 0, 1)
+x100 <- rnorm(100, 0, 1)
+x1000 <- rnorm(1000, 0, 1)
+
+```
+
+## Estimate the first 10 autocovariance and autocorrelations produce plots (trajectory and correlogram). 
+
+### n=10
+```{r}
+acf(x10, type = "covariance")
+```
+
+```{r}
+acf(x10, type = "correlation")
+```
+
+```{r}
+plot( x10
+     ,type='l'
+     ,ylab="White Noise"
+     ,xlab="t"
+     ,frame.plot=FALSE
+     ,main = paste("n = ",length(x10)))
+```
+
+### n=50
+```{r}
+acf(x50, type = "covariance")
+```
+
+```{r}
+acf(x50, type = "correlation")
+```
+
+```{r}
+plot( x50
+     ,type='l'
+     ,ylab="White Noise"
+     ,xlab="t"
+     ,frame.plot=FALSE
+     ,main = paste("n = ",length(x50)))
+```
+
+### n=100
+```{r}
+acf(x100, type = "covariance")
+```
+
+```{r}
+acf(x100, type = "correlation")
+```
+
+```{r}
+plot( x100
+     ,type='l'
+     ,ylab="White Noise"
+     ,xlab="t"
+     ,frame.plot=FALSE
+     ,main = paste("n = ",length(x100)))
+```
+
+### n=1000
+```{r}
+acf(x1000, type = "covariance")
+```
+
+```{r}
+acf(x1000, type = "correlation")
+```
+
+```{r}
+plot( x1000
+     ,type='l'
+     ,ylab="White Noise"
+     ,xlab="t"
+     ,frame.plot=FALSE
+     ,main = paste("n = ",length(x1000)))
+```
+
+
+## with $\sigma^2 > 1$ :
+
+```{r}
+aa <- rnorm(10,0,2)
+bb <- rnorm(50,0,2)
+cc <- rnorm(100,0,2)
+dd <- rnorm(1000,0,2)
+```
+ 
+### n=10
+```{r}
+acf(aa,10)
+```
+```{r}
+plot(aa
+     ,type='l'
+     ,ylab="White Noise"
+     ,xlab="t"
+     ,frame.plot=FALSE
+     ,main = paste("n = ",length(aa)))
+```
+
+### n=50
+```{r}
+acf(bb,10)
+```
+```{r}
+plot(bb,type='l'
+     ,ylab="White Noise"
+     ,xlab="t"
+     ,frame.plot=FALSE
+     ,main = paste("n = ",length(bb)))
+
+```
+
+### n=100
+```{r}
+acf(cc,10)
+```
+```{r}
+plot(cc
+     ,type='l'
+     ,ylab="White Noise"
+     ,xlab="t"
+     ,frame.plot=FALSE
+     ,main = paste("n = ",length(cc)))
+```
+
+### n=1000
+```{r}
+acf(dd,10)
+```
+```{r}
+plot(dd
+     ,type='l'
+     ,ylab="White Noise"
+     ,xlab="t"
+     ,frame.plot=FALSE
+     ,main = paste("n = ",length(dd)))
+```
+
+
+# Compare correlograms. Is there a pattern in the correlograms as the sample size n potentially approaches the population size? If you generate N(0; 2 6= 1) random data, will the ACF change?
+
+As n increases from 10 to 1000, ACF is getting smaller and the significance bounds (confidence limits) become narrower. In all cases, autocorrelation=1 at Lag=0. Values outside the displayed limits have significant autocorrelation. The correlogram does not change when variance is not equal to 1 which indicates the data are truely random.
