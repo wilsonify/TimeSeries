@@ -5,3 +5,4 @@
 #install.packages('leaflet')
 install.packages('astsa')
 install.packages('dplyr')
+install.packages('timeSeries')
