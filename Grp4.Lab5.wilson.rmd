@@ -1,0 +1,132 @@
+---
+title: "Lab5"
+author: "Claudius Taylor, Tom Wilson, Junpu Zhao"
+date: "9/26/2018"
+output: pdf_document
+---
+
+```{R}
+library('dplyr')
+library('astsa')
+library('stringr')
+library('data.table')
+```
+
+Generate a simple random walk data.
+
+
+```{R}
+w_t <- ts(cumsum(rnorm(100)))
+```
+
+
+```{R}
+plot(w_t)
+acf(w_t)
+```
+
+Apply ﬁrst-order diﬀerencing.
+
+
+```{R}
+dw_t <- diff(w_t)
+```
+
+
+```{R}
+plot(dw_t)
+acf(dw_t)
+```
+
+Did it remove non-stationarity? *yes*
+
+Apply second-order diﬀerencing.
+
+
+```{R}
+ddw_t <- diff(dw_t)
+```
+
+Did it remove non-stationarity? No it actually intoduces some non-stationarity that was not present in the first order difference.
+
+
+```{R}
+plot(ddw_t)
+acf(ddw_t)
+```
+
+Consider the immigration data from BB. 
+
+
+```{R}
+library(data.table)
+library(dplyr)
+library(stringr)
+```
+
+
+```{R}
+immigration_data = fread('https://raw.githubusercontent.com/wilsonify/TimeSeries/master/data/immigration.csv')
+```
+
+
+```{R}
+plot(immigration_data$yr,immigration_data$count)
+acf(immigration_data$count)
+```
+
+Stationary? No
+
+If not stationary then try to stationarize the data.
+
+
+
+```{R}
+dcount <- diff(immigration_data$count)
+acf(dcount)
+```
+
+Consider the Monthly Australian Beer Consumption data from BB.
+
+Decompose the data and interpret.
+
+
+```{R}
+beer_data = fread('https://raw.githubusercontent.com/wilsonify/TimeSeries/master/data/monthly-beer-production-in-austr.csv')
+```
+
+
+```{R}
+beer_data %>% str()
+```
+
+
+```{R}
+colnames(beer_data) <- c('month','beer')
+```
+
+
+```{R}
+#beer_data$month <-
+beer_data$month %>% str_split_fixed('-',2)
+#plot(x=beer_data$month,y=beer_data$beer)
+```
+
+|Code |	Value|
+|-----|------|
+|%d  |	Day of the month (decimal number)|
+|%m  |	Month (decimal number)|
+|%b  |	Month (abbreviated)|
+|%B  |	Month (full name)|
+|%y  |	Year (2 digit)|
+|%Y  |	Year (4 digit)|
+
+
+```{R}
+beer_data$month
+```
+
+
+```{R}
+
+```
