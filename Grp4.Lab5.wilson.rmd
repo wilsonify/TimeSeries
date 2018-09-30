@@ -16,7 +16,7 @@ Generate a simple random walk data.
 
 
 ```{R}
-w_t <- ts(cumsum(rnorm(100)))
+w_t <- ts(rnorm(500,0,1))
 ```
 
 
@@ -38,7 +38,7 @@ plot(dw_t)
 acf(dw_t)
 ```
 
-Did it remove non-stationarity? *yes*
+Did it remove non-stationarity? *no* it adds non-stationartiy at lag=1.
 
 Apply second-order diﬀerencing.
 
@@ -47,7 +47,7 @@ Apply second-order diﬀerencing.
 ddw_t <- diff(dw_t)
 ```
 
-Did it remove non-stationarity? No it actually intoduces some non-stationarity that was not present in the first order difference.
+Did it remove non-stationarity? *No* it intoduces non-stationarity at lag=2
 
 
 ```{R}
@@ -62,6 +62,7 @@ Consider the immigration data from BB.
 library(data.table)
 library(dplyr)
 library(stringr)
+library(lubridate)
 ```
 
 
@@ -95,38 +96,36 @@ Decompose the data and interpret.
 beer_data = fread('https://raw.githubusercontent.com/wilsonify/TimeSeries/master/data/monthly-beer-production-in-austr.csv')
 ```
 
-
-```{R}
-beer_data %>% str()
-```
-
-
 ```{R}
 colnames(beer_data) <- c('month','beer')
 ```
 
-
 ```{R}
-#beer_data$month <-
-beer_data$month %>% str_split_fixed('-',2)
-#plot(x=beer_data$month,y=beer_data$beer)
+beer_data$month <- beer_data$month %>% paste("01",sep="") %>% lubridate::as_date()
 ```
 
-|Code |	Value|
-|-----|------|
-|%d  |	Day of the month (decimal number)|
-|%m  |	Month (decimal number)|
-|%b  |	Month (abbreviated)|
-|%B  |	Month (full name)|
-|%y  |	Year (2 digit)|
-|%Y  |	Year (4 digit)|
-
-
 ```{R}
-beer_data$month
+trend_beer = ma(timeserie_beer, order = 4, centre = T)
+plot(beer)
+acf(beer)
 ```
 
+```{R}
+dbeer <- diff(beer)
+plot(dbeer)
+acf(dbeer)
+```
 
 ```{R}
+ddbeer <- diff(dbeer)
+plot(ddbeer)
+acf(ddbeer)
+```
 
+first and second order differencing is not sufficient to remove non-stationarity in beer data.
+
+
+
+```{R}
+decompose(beer,"additive")
 ```
