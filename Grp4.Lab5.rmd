@@ -60,9 +60,9 @@ dcount <- diff(immigration_data$count)
 acf(dcount)
 ```
 
-Consider the Monthly Australian Beer Consumption data from BB.
+## Consider the Monthly Australian Beer Consumption data from BB.
 
-Decompose the data and interpret.
+### Decompose the data and interpret.
 
 
 ```{R}
