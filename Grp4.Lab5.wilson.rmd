@@ -6,65 +6,39 @@ output: pdf_document
 ---
 
 ```{R}
-library('dplyr')
-library('astsa')
-library('stringr')
-library('data.table')
+library(data.table)
 ```
 
-Generate a simple random walk data.
-
+## Generate a simple random walk data.
 
 ```{R}
 w_t <- ts(rnorm(500,0,1))
-```
-
-
-```{R}
 plot(w_t)
 acf(w_t)
 ```
 
-Apply ﬁrst-order diﬀerencing.
 
+### Apply first-order differencing.
 
 ```{R}
 dw_t <- diff(w_t)
-```
-
-
-```{R}
 plot(dw_t)
 acf(dw_t)
 ```
+#### Did it remove non-stationarity? 
+*no* it adds non-stationartiy at lag=1.
 
-Did it remove non-stationarity? *no* it adds non-stationartiy at lag=1.
-
-Apply second-order diﬀerencing.
-
-
+### Apply second-order differencing.
 ```{R}
 ddw_t <- diff(dw_t)
-```
-
-Did it remove non-stationarity? *No* it intoduces non-stationarity at lag=2
-
-
-```{R}
 plot(ddw_t)
 acf(ddw_t)
 ```
 
-Consider the immigration data from BB. 
+#### Did it remove non-stationarity? 
+*No* it intoduces non-stationarity at lag=2
 
-
-```{R}
-library(data.table)
-library(dplyr)
-library(stringr)
-library(lubridate)
-```
-
+## Consider the immigration data from BB. 
 
 ```{R}
 immigration_data = fread('https://raw.githubusercontent.com/wilsonify/TimeSeries/master/data/immigration.csv')
@@ -76,11 +50,10 @@ plot(immigration_data$yr,immigration_data$count)
 acf(immigration_data$count)
 ```
 
-Stationary? No
+### Stationary? 
+No
 
-If not stationary then try to stationarize the data.
-
-
+### If not stationary then try to stationarize the data.
 
 ```{R}
 dcount <- diff(immigration_data$count)
@@ -101,31 +74,12 @@ colnames(beer_data) <- c('month','beer')
 ```
 
 ```{R}
-beer_data$month <- beer_data$month %>% paste("01",sep="") %>% lubridate::as_date()
+beer <- ts(beer_data$beer, start = 1956 ,frequency = 12)
 ```
 
 ```{R}
-trend_beer = ma(timeserie_beer, order = 4, centre = T)
-plot(beer)
-acf(beer)
+decompose_beer <- decompose(beer,type="additive")
+plot(decompose_beer)
 ```
 
-```{R}
-dbeer <- diff(beer)
-plot(dbeer)
-acf(dbeer)
-```
-
-```{R}
-ddbeer <- diff(dbeer)
-plot(ddbeer)
-acf(ddbeer)
-```
-
-first and second order differencing is not sufficient to remove non-stationarity in beer data.
-
-
-
-```{R}
-decompose(beer,"additive")
-```
+Australian beer production shows a steady increase from 1960 to 1975 plateauing at 160 megaliters per month with consistent seasonal swings.
