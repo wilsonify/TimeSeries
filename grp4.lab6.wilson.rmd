@@ -1,0 +1,53 @@
+---
+title: "Lab6"
+author: "Claudius Taylor, Tom Wilson, Junpu Zhao"
+date: "10/10/2018"
+output: pdf_document
+---
+
+Consider the luteinizing hormone (data(lh) from
+library(datasets)) in blood samples at 10-min intervals from a human female, 48 samples. 
+
+```R
+library(datasets)
+```
+
+```R
+plot(lh)
+acf(lh,lag.max = "m")
+```
+Is the pattern of the ACF consitent
+with a stationary AR model?
+
+Yes. The acf of lh oscillates and decays to zero as lag increases. 
+
+Simulate an AR(3) using n = 50 and the coefficients=c(0.64,-0.06,-0.22). 
+Using the coefficients, is this a stationary AR(3)?
+
+```R
+coefficients <- c(0.64,-0.06,-0.22)
+ar3 <- arima.sim(list(order=c(3,0,0),ar=coefficients),n=50)
+```
+
+```R
+plot(ar3)
+```
+
+```R
+z <- c(1,-coefficients)
+Mod(polyroot(z))
+```
+
+this AR(3) is stationary because all roots of the characteristic polynomial have a magnitude > 1.
+
+Compare the theoretical ACF with the ACF
+of the luteinizing hormone data . Observations?
+
+
+```R
+acf(ar3,lag.max = "m")
+```
+
+```R
+acf(lh,lag.max = "m")
+```
