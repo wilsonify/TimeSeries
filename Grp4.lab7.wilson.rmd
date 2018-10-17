@@ -25,3 +25,5 @@ dincome <- diff(income)
 ts.plot(dincome)
 acf(dincome)
 ```
+quarterly personal disposable income for the US, 1970 to 2010 is stationary. It can be modeled as a random walk.
+changes in quarterly personal disposable income for the US, 1970 to 2010 are non-stationary at lag=1. It can be modeled as a moving average(1).
