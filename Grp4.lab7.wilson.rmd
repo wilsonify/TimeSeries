@@ -1,0 +1,27 @@
+---
+title: "Lab7"
+author: "Claudius Taylor, Tom Wilson, Junpu Zhao"
+date: "10/17/2018"
+output: pdf_document
+---
+
+# 1. Simulate an MA(3). Is it invertible? What do you notice about the pattern of the ACF?
+
+```{R}
+ma3 <- arima.sim(list(order=c(0,0,3), ma= rep(0.9,3)), n=100)
+acf(ma3)
+```
+acf shows non-stationarity at lag = 1, 2, and 3
+    
+# 2. Analyze the percentage changes in quarterly personal disposable income for the US, 1970 to 2010. What model can you propose?
+
+```{R}
+library(fpp)
+income <- ts(usconsumption[, 'income'],start=1970,frequency = 4)
+ts.plot(income)
+acf(income)
+
+dincome <- diff(income)
+ts.plot(dincome)
+acf(dincome)
+```
