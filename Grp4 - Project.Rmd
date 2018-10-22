@@ -2,7 +2,7 @@
 title: "Grp4 - Project"
 author: "Claudius Taylor, Tom Wilson, Junpu Zhao"
 date: "10/19/2018"
-output: pdf_document
+output: word_document
 ---
 
 ```{r setup, include=FALSE}
@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(dplyr)
 library(data.table)
-data = ("/Users/taylormade/Desktop/Time Series/claybrick.csv")
+data = ("https://raw.githubusercontent.com/wilsonify/TimeSeries/master/data/claybrick.csv")
 columnNames = c("month", "production") 
 brick = read.csv(file = data,
                  comment.char = "",
