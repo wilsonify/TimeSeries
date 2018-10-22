@@ -1,0 +1,25 @@
+---
+title: "Grp4 - Project"
+author: "Claudius Taylor, Tom Wilson, Junpu Zhao"
+date: "10/19/2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(dplyr)
+library(data.table)
+data = ("/Users/taylormade/Desktop/Time Series/claybrick.csv")
+columnNames = c("month", "production") 
+brick = read.csv(file = data,
+                 comment.char = "",
+                 header = TRUE,
+                 col.names = columnNames)
+brick = ts(brick$production, start = 1956, frequency = 12)
+plot(brick)
+```
+
