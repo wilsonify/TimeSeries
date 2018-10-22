@@ -1,0 +1,327 @@
+---
+title: "Chapter 1 Notes"
+author: "Pincomb G."
+date: "10/3/2018"
+output:
+  html_document:
+    theme: paper
+    highlight: tango
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Libraries
+```{r}
+library(astsa)
+```
+
+### Nature of Time Series Data
+
+Example 1.2: Global Warning
+
+* Observations: Apparent upward trend in the series
+
+```{r}
+plot(gtemp, type="o", ylab="Global Temperature Deviations")
+```
+
+Example 1.5: El Nino & Fish Population
+
+* Analyzing several time series at once
+* Observations: Exhibit repetitive behavior, with regularly repeated cycles that are clearly visible.
+
+```{r}
+par(mfrow = c(2,1))  # set up the graphics
+ts.plot(soi, ylab="", main="Southern Oscillation Index")
+ts.plot(rec, ylab="", main="Recruitment") 
+```
+
+### 1.2 Time Series Statistical Models
+
+* Assume time series can be defined as a collection of random variables indexed according to the order they are obtained in time.
+* **Stochastic process**: collection of random variables, {x_t}, indexed by $t$
+* **Realization**: observed values of a stochastic process
+
+#### White Noise
+* Collection of uncorrelated random variables, $w_t$, with mean 0 and finite variance $\sigma^2_w$
+* Deonation: $w_t$ ~ wn(0, $\sigma^2_w)$
+* **Independent white noise**: noise is indepedent and identically distrivuted (iid) random variables
+    + $w_t$ ~ iiD(0, $\sigma^2_w)$
+* **Gaussian white noise**: w_t are independent normal random variables
+    + $w_t$ ~ iiDN(0, $\sigma^2_w)$
+* If stochastic behavior of all time series could be explained in terms of white noise model, classical statistical methods would suffices
+
+Example 1.8: Gaussian white noise
+```{r}
+w = rnorm(500, 0, 1)   # 500 N(0,1)
+plot.ts(w, main="white noise")
+```
+
+Generating ACF for white noise
+```{r}
+acf(w, type="covariance",lag.max=10, plot=TRUE)
+```
+
+
+#### Moving Averages and Filtering
+* Might replace white noise series $w_t$ by moving average that smooths the series
+* Average of its current value and its immediate neighbors in the past and future
+* Denotation: $v_t=1/3(w_{t-1}+w_t+w_{t+1})$
+
+Example 1.8: Moving average of Gaussian white noise series
+```{r}
+par(mfrow=c(1, 2))
+w = rnorm(500, 0, 1)
+v = filter(w, sides=2, filter=rep(1/3, 3))   # moving average, sides=2 because centered around lag 0
+plot.ts(w, main="white noise")
+plot.ts(v, ylim=c(-3, 3), main="moving average")
+```
+
+Generating ACF for moving average
+```{r}
+acf(na.omit(v),30) 
+```
+
+#### Autoregressions
+* Prediction of current value $x_t$ of a time series as a function of the past two values of the series
+* Problem with start-up values exist
+* ACF decreases exponentially as lag increases, sometimes exponential decay is sinusoidal in nature
+
+Example 1.10: $x_t=x_{t-1}-.9x_{t-2}+w_t$
+for $t$=1,2,....,500. (derived from example 1.8)
+```{r}
+w = rnorm(550, 0, 1)   # 50 extra to avoid startup problems
+x = filter(w, filter=c(1, -.9), method="recursive")[-(1:50)]   #remove first 50
+plot.ts(x, main="autoregression")
+```
+
+Generating ACF for autoregression
+```{r}
+acf(na.omit(x),50)  # calculate autocorrelation for lag up to 50
+```
+
+
+#### Random Walks with Drift
+* Analyzing trend, such as seen in global temperature data
+* Denotation: $x_t=\delta+x_{t-1}+w_t$
+    + for $t$=1, 2, ..., with initial condition x_0=0 and $w_t$ is white noise
+    + constant $\delta$ is called **drift**
+    + when $\delta=0$, called **random walk**
+* The value of the time series at time $t$ is the value of the series at time $t$-1 plus a completely random movement determined by $w_t$
+
+Example 1.10: Random walk
+```{r}
+set.seed(110)  # to reproduce results
+w = rnorm(200)
+x = cumsum(w)
+wd = w + .2
+xd = cumsum(wd)
+plot.ts(xd, ylim=c(-30,30), main="random walk", ylab='')
+lines(x, col=4); abline(h=0, col=4, lty=2); abline(a=0, b=.2, lty=2)
+```
+
+Example Lecture: Random walk with 60 iid standard normal errors
+```{r}
+n = 60
+set.seed(12345) 
+rw = cumsum(rnorm(n))
+sim.random.walk = ts(rw, freq=1, start=1)
+plot(sim.random.walk, type='o', ylab='random walk')
+```
+
+#### Simple random walk
+* Non-stationary process
+
+Example Lecture: 
+```{r}
+w = rnorm(150)
+rw = cumsum(w)   
+rw[1:4]
+par(mfrow=c(2,1))
+sim.random.walk = ts(rw, freq=1, start=1)
+plot(sim.random.walk, type='o', ylab='Another Random Walk', frame.plot=FALSE)
+acf(sim.random.walk, 50)$acf[1:10]
+```
+
+#### Signal in Noise
+* Realistic models for generating time series assume underlying signal with some consistent periodic variation, contaminated by adding a random noise
+* Sinusoidal waveform can be written as $Acos(2\pi\omega_t+\Phi)$
+    + A = amplitude
+    + $\omega$ = frequency of oscillation
+    + $\Phi$ is phase shift
+* Degree to which signal is obscured depends on amplitue of signal and size of $\sigma_w$
+* Greater variance of noise, less clear signal
+* When noise is excluded, the periodicity is apparent
+* **SNR (signal-to-noise-ratio)**: ratio of the amplitude of the signal to$\sigma_w$
+    + larger the SNR, easier it is to detect signal
+
+
+Example 1.11: Cosine wave with period 50 points (top) compared with cosine wave contaminated with additive white Gaussian noise, $\sigma_w=1$ (middle) and $\sigma_w=5$ (bottom)
+```{r}
+cs = 2*cos(2*pi*1:500/50 + .6*pi)
+w = rnorm(500,0,1)
+par(mfrow=c(3,1), mar=c(3,2,2,1), cex.main=1.5)
+plot.ts(cs, main=expression(2*cos(2*pi*t/50+.6*pi)))
+plot.ts(cs+w, main=expression(2*cos(2*pi*t/50+.6*pi) + N(0,1)))
+plot.ts(cs+5*w, main=expression(2*cos(2*pi*t/50+.6*pi) + N(0,25)))
+```
+
+#### Sine & Cosine Curves
+
+Cosine & Sine
+
+* Halfing denominator doubles # of cycles
+
+```{r}
+t = 1:100
+thet = 2*pi*(t-1)/100
+thet.half = 2*pi*(t-1)/50
+par(mfrow=c(2,1))
+plot(cos(thet), typ="l", main="Cosine and sine curves", frame.plot=FALSE)
+lines(sin(thet),typ="l", lty=2)
+plot(cos(thet.half), typ="l", main="Two cycles of sine and cosine waves", frame.plot=FALSE)
+lines(sin(thet.half),typ="l", lty=2)
+```
+
+Sinusoidal sine curve 
+```{r}
+a = 0.2   # amplitude
+w = 1/52  # frequency(one cycle/52 time points)
+fi = 0.7*pi  # phase shift
+t = 0:150   # time t
+
+par(mfrow=c(2, 2))
+mut = a*sin(2*pi*w*t + fi)
+plot(t, mut, type="l", frame.plot=FALSE, main="mut")
+points(t, mut, type="p", pch=19)
+
+yt = mut + rnorm(length(t) )   #N(0,1) noise
+plot(t, yt, type="l", frame.plot=FALSE, main="yt")
+points(t, yt, pch=19)
+
+yt2 = mut + rnorm(length(t), 0, 4)   #N(0,4^2)
+plot(t, yt2, type="l", frame.plot=FALSE, main="yt2")
+points(t, yt2, pch=19)
+
+yt3 = mut + rnorm(length(t), 0, 20)   #N(20^2)
+plot(t, yt3, type="l", frame.plot=FALSE, main="yt3")
+points(t, yt3, pch=19)
+
+
+```
+
+Random Cosine Curve (with random phase shift)
+```{r}
+yt4 = cos(2*pi*( t/12 + runif(length(t))))
+plot(t, yt4, type="l", frame.plot=FALSE)
+points(t, yt4, pch=19)
+```
+
+### Stationary Time Series
+
+  * **Strictly stationary**: time series is one for which the probablistic behavior of every collection of values is identifcal to that of the time shifted set
+    + All multivariate distribution functions for subsets of variables must agree with counterparts in shifted set for all values of shift parameter $h$
+* **Weakly stationary**: time series is a finite variance process such that
+    + the mean value function, $\mu_t$, is constant and does not depend on time $t$, and
+    + the autocovariance function, $\gamma(s,t)$, depends on $s$ and $t$ only through their difference |s-t|
+* Will use term **stationary** to mean weakly stationary
+* If process is stationary in a strict sense, will use term strictly stationary
+* Random walk is NOT stationary
+* Must be indepedent of time to be stationary
+* **Jointly stationary**: when two time series are each stationary, and the cross-coveriance function is a function only of lag h, and not time
+
+Example 1.24: Prediction Using Cross-Correlation
+```{r}
+x = rnorm(100)
+y = lag(x, -5) + rnorm(100)
+ccf(y, x, ylab='CCovF', type='covariance')
+```
+
+Example Lecture: Cross Correlation Function
+```{r}
+par(mfrow=c(1,2))
+w = rnorm(200)
+xt = filter(w, filter=rep(1, 2), method = "convolution", sides=1)
+yt = filter(w,filter=c(1, -1), method = "convolution", sides=1)
+ccf(na.omit(xt), na.omit(yt), main="CCF1")
+
+#compare
+ccf(na.omit(yt), na.omit(xt), main="CCF2")
+```
+
+Example Lecture: Prediction using cross-correlation function (lag ragression)
+
+  * Note that negative lags indicate x leads y   
+  * Note that  positive  lags indicate x leads y 
+  * If significant pick, significant correlaion on respective lag
+
+```{r}
+par(mfrow=c(1,2))
+x = rnorm(100)
+y = lag(x, -5) + rnorm(100)
+
+ccf(x, y, ylab='CCorrF', type='correlation')  #ccf(x,y,...)
+#Note that negative lags indicate x leads y  
+
+ccf(y, x, ylab='CCorrF', type='correlation')  #ccf(y,x,...); x leads y 
+#Note that  positive  lags indicate x leads y 
+```
+
+### Estimation of Correlation
+
+Example 1.25: Sample ACF and Scatterplots
+```{r}
+(r = round(acf(soi, 6, plot=FALSE)$acf[-1], 3))   # first 6 acf values
+par(mfrow=c(1, 2)) 
+plot(lag(soi,-1), soi); legend('topleft', legend=r[1])
+plot(lag(soi,-6), soi); legend('topleft', legend=r[6])
+
+```
+
+Example 1.28: SOI and Recruitment Correlation Analysis
+
+  * Note: Peaks at negative lags indicate SOI(x) leads Recruitment(y)
+  
+```{r}
+par(mfrow=c(3,1))
+acf(soi, 48, main="Southern Oscillation Index")
+acf(rec, 48, main="Recruitment")
+ccf(soi, rec, 48, main="SOI vs Recruitment", ylab="CCF")
+```
+
+Example Lecture: Lagged Regression
+```{r}
+lag1.plot(soi, 12)
+lag2.plot(soi,rec,8)
+```
+
+Example Lecture: Sunspotz
+```{r}
+data(sunspotz)
+ts.plot(sunspotz)
+
+eg2 = acf(sunspotz,36)
+mat = cbind(0:36, eg2$acf)
+mat 
+colnames(mat) = c("lag", "acf")
+
+#Another way with the lower and upper limit for alpha=0.05
+plot(mat,type="h") 
+abline(h=0)
+abline(h=1.96/sqrt(459),col="blue")
+abline(h=-1.96/sqrt(459),col="blue")
+
+#p-value calculation
+pv=2*pnorm( sqrt(459)*abs(mat[,2]),lower.tail = FALSE )
+cbind(0:36, pv)
+```
+
+
+
+
+
+
+
+
+
