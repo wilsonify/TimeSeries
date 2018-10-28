@@ -43,10 +43,33 @@ brick = read.csv(file = data,
                  comment.char = "",
                  header = TRUE,
                  col.names = columnNames)
-brick = ts(brick$production, start = 1956, frequency = 12)
+brick = ts(brick$production, start = 1956, end = 1994 ,frequency = 12)
 ts.plot(brick)
 ```
 
+```{r}
+brick
+```
+
+```{r}
+acf(brick)
+```
+
+```{r}
+pacf(brick)
+```
+
+```{r}
+avg_brick <- mean(brick)
+```
+
+```{r}
+dbrick <- diff(brick)
+```
+
+```{r}
+acf(dbrick)
+```
 # Conclusion
 
 Currently, the use of brick has remained steady, at around seven to nine billion a year, down from the 15 billion used annually during the early 1900s. In an effort to increase demand, the brick industry continues to explore alternative markets and to improve quality and productivity. Fuel efficiency has also improved, and by the year 2025 brick manufacturers may even be firing their brick with solar energy. However, such changes in technology will occur only if there is still a demand for brick.
