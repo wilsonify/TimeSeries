@@ -1,8 +1,9 @@
 ---
-title: "Grp4 - Project"
+title: "MONTHLY PRODUCTION OF CLAY BRICKS"
 author: "Claudius Taylor, Tom Wilson, Junpu Zhao"
 date: "10/19/2018"
 output: word_document
+reference_docx: "./Grp4 - Project.docx"
 ---
 
 ```{r setup, include=FALSE}
