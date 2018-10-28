@@ -1,19 +1,42 @@
 ---
-title: "MONTHLY PRODUCTION OF CLAY BRICKS"
+title: "Monthly Production of Clay Bricks"
 author: "Claudius Taylor, Tom Wilson, Junpu Zhao"
 date: "10/19/2018"
 output: word_document
+toc: true
+bibliography: references.bib
 reference_docx: "./Grp4 - Project.docx"
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-
-```{r}
+# Required R Packages
+```{r message=FALSE}
 library(dplyr)
 library(data.table)
+```
+
+ [![Pile of Clay](./images/clay.jpg)](https://raw.githubusercontent.com/wilsonify/TimeSeries/master/images/clay.jpg)
+
+# Introduction
+
+Bricks are used for building and pavement all throughout the world. In the USA, bricks were once used as a pavement material, and now it is more widely used as a decorative surface rather than a roadway material.[@ACSbrick] A healthy living environment especially requires the use of the right building material. In general building materials are strongly influencing the indoor climate and quality of living.
+
+[@claybrickassociation]
+
+# Problem
+
+The complexity of planning and constructing using clay bricks has increased in recent years. 
+
+[@claywienerberger]
+
+# Purpose
+
+
+
+# Result and Discussion
+The data for the project was obtained from the Time Series Data library at datamarket.com. A snapshot of the table and line graph is shown in Figures 1 & 2.
+[@ACSBtrends]
+
+```{r}
 data = ("https://raw.githubusercontent.com/wilsonify/TimeSeries/master/data/claybrick.csv")
 columnNames = c("month", "production") 
 brick = read.csv(file = data,
@@ -21,6 +44,13 @@ brick = read.csv(file = data,
                  header = TRUE,
                  col.names = columnNames)
 brick = ts(brick$production, start = 1956, frequency = 12)
-plot(brick)
+ts.plot(brick)
 ```
+
+# Conclusion
+
+Currently, the use of brick has remained steady, at around seven to nine billion a year, down from the 15 billion used annually during the early 1900s. In an effort to increase demand, the brick industry continues to explore alternative markets and to improve quality and productivity. Fuel efficiency has also improved, and by the year 2025 brick manufacturers may even be firing their brick with solar energy. However, such changes in technology will occur only if there is still a demand for brick.
+[@claydatamarket]
+
+# References
 
