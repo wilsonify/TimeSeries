@@ -1,0 +1,37 @@
+---
+title: "Prob3.10"
+author: "Claudius Taylor, Tom Wilson, Junpu Zhao"
+date: "11/11/2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Let $x_t$ represent the cardiovascular mortality series (cmort) discussed in Example 2.2. 
+
+## (a)
+Fit an AR(2) to $x_t$ using linear regression as in Example 3.18.
+
+```{r}
+library(astsa) # acf
+acf2(cmort, 48)[1:2] # will produce values and a graphic
+(regr = ar.ols(cmort, order=2, demean=FALSE, intercept=TRUE)) 
+regr$asy.se.coef # standard errors of the estimates
+```
+
+The fitted AR(2) model is :
+
+$$ x_t = 11.45 + 0.429 x_{t-1} + 0.442 x_{t-2} + w_t$$
+
+## (b)
+
+Assuming the fitted model in (a) is the true model, find the forecasts over a four-week horizon, $x^n _{n+m}$, for $m = 1, 2, 3, 4$, and the corresponding 95% prediction intervals.
+
+```{r}
+n.ahead = 4
+sarima.for(cmort, n.ahead, 2, 0, 0) # 4 forecasts with an AR(2) model for cmort
+```
+
+Actual values are black. Predictions are red. Confidence intervals are grey (dark=68% and light=95%).

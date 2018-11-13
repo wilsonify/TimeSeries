@@ -1,0 +1,44 @@
+---
+title: "Prob3.21"
+author: "Claudius Taylor, Tom Wilson, Junpu Zhao"
+date: "11/9/2018"
+output: pdf_document
+---
+
+```{r setup, echo=FALSE,message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+library(dplyr)
+```
+
+Generate 10 realizations of length n = 200 each of an ARMA(1,1) process with $\phi = 0.9$, $\theta = 0.5$ and $\sigma^2 = 1$. Find the MLEs of the three parameters in each case and compare the estimators to the true values.
+
+```{r}
+phi = matrix(0,10,1)
+theta = matrix(0,10,1)
+sigma2 = matrix(0,10,1)
+```
+
+```{R}
+for(i in 1:10){
+  x<-arima.sim(n=200,list(ar=0.9,ma=0.5,sd=sqrt(1)))
+  fit<-arima(x,order=c(1,0,1))
+  phi[i] =fit$coef[1]
+  theta[i]<-fit$coef[2]
+  sigma2[i]<-fit$sigma2
+}
+```
+
+```{R}
+mytable = data.frame(parameters = rep(c("phi", "theta", "sigma^2"), 10)
+                        ,MLEs = round(rbind(phi, theta, sigma2), 3)
+                        ,trueValue = rep(c(0.9,0.5,1),10)
+                        )
+```
+
+\pagebreak
+
+```{R}
+mytable %>% kable()
+```
+

@@ -1,0 +1,74 @@
+---
+title: "Lab 10"
+author: "Claudius Taylor, Tom Wilson, Junpu Zhao"
+date: "11/13/2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE}
+library(TSA)
+library(astsa)
+library(datasets)
+library(forecast)
+library(tseries)
+```
+
+Apply the Box-Jenkins method (transform to stationarity if
+necessary and identify the time series model(e.g., ARMA(p,q)))
+for the luteinizing hormone data. Write down the algebraic
+expression of the fitted model. How is your "final" model
+compared with an AR(3)?
+
+# plot
+```{r}
+data(lh)
+plot(lh)
+```
+
+# estimate p,q
+```{R}
+acf(lh)
+acf2(lh)[1:2]
+eacf(lh)
+
+```
+
+candiate models ARMA(1,1) or AR(1)
+
+# check residuals
+```{r}
+out1 <- arma(x = lh, order = c(1, 0))
+summary(out1)
+```
+
+```{R}
+out2 <- arma(x = lh, order = c(1, 1))
+summary(out2)
+```
+
+P value of ma(1) is large, which suggests that ar(1) is the better model.
+
+$$ X_t =0.9997 + 0.5861*X_{t-1} + w_t $$
+
+# compare to AR(3)
+```{R}
+out3 <- arma(x = lh, order = c(3, 0))
+summary(out3)
+```
+
+Again we see that 2nd and 3rd AR terms are not significant, so AR(1) is prefered over AR(3).
+
+# forecast
+Use your final model to forecast the next 24 luteinizing hormone measurements.
+
+```{r}
+n.ahead = 24
+sarima.for(lh, n.ahead, 1, 0, 0)
+
+```
+
+
