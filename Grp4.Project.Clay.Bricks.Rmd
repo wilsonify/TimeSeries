@@ -73,7 +73,20 @@ acf(dbrick)
 # Conclusion
 
 Currently, the use of brick has remained steady, at around seven to nine billion a year, down from the 15 billion used annually during the early 1900s. In an effort to increase demand, the brick industry continues to explore alternative markets and to improve quality and productivity. Fuel efficiency has also improved, and by the year 2025 brick manufacturers may even be firing their brick with solar energy. However, such changes in technology will occur only if there is still a demand for brick.
-[@claydatamarket]
 
-# References
+References {-}
+---
+- https://www.datamarket.com: source of data
 
+- https://www.eia.gov/totalenergy/data/annual
+
+- www.claybrick.org
+
+- "Trends in Brick Plant Operation," 
+  The American Ceramic Society Bulletin. 1992, pp.69-74
+  
+- "Brick Manufacturing from Past to Present," 
+  The American Ceramic Society Bulletin. May, 1990, pp.807-813
+ 
+---
+  
