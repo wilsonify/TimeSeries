@@ -2,10 +2,10 @@
 title: "Monthly Production of Clay Bricks"
 author: "Claudius Taylor, Tom Wilson, Junpu Zhao"
 date: "10/19/2018"
-output: word_document
+output: pdf_document
 toc: true
 bibliography: references.bib
-reference_docx: "./Grp4 - Project.docx"
+#reference_docx: "./Grp4 - Project.docx"
 ---
 
 # Required R Packages
@@ -47,9 +47,6 @@ brick = ts(brick$production, start = 1956, end = 1994 ,frequency = 12)
 ts.plot(brick)
 ```
 
-```{r}
-brick
-```
 
 ```{r}
 acf(brick)
