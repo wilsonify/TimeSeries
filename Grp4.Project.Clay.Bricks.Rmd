@@ -21,6 +21,7 @@ library(dplyr)
 library(data.table)
 library(astsa)
 library(forecast)
+library(TSA)
 ```
 
 
@@ -67,7 +68,6 @@ pacf(brick)
 
 Consider stationarizing this data via first-order differenceing.
 
-
 ```{r}
 dbrick <- diff(brick)
 acf2(dbrick,48)[1]
@@ -80,6 +80,19 @@ acf2(diff(diff(brick), 12), 48)[1]
 ```
 From the seasonal lag perspective, we can see that the ACF cuts off at the 2nd seasonal lag, while the PACF appears to tail off. This would suggest a SARMA model of (0,2). Within the first seasonal cycle, it can be seen that PACF appears to be cutting off at lag = 3, while the ACF tails off. Thus a proposed model can be ARMA (3,0) x (0,2)_12 for the differenced time series.
 
+```{r}
+plot(decompose(brick,"additive"))
+```
+
+
+```{r}
+plot(decompose(brick,"multiplicative"))
+```
+
+```{R}
+auto.arima(brick)
+eacf(brick)
+```
 
 ```{r}
 sarima(brick, 3,1,0, 0,1,2, 12)
