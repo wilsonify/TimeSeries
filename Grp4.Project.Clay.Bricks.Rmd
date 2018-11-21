@@ -7,13 +7,6 @@ toc: true
 bibliography: references.bib
 ---
 
-# Required R Packages
-```{r message=FALSE}
-library(dplyr)
-library(data.table)
-library(astsa)
-library(forecast)
-```
 \centering
 
  [![Pile of Clay](./images/clay.jpg)](https://raw.githubusercontent.com/wilsonify/TimeSeries/master/images/clay.jpg)
@@ -21,6 +14,15 @@ library(forecast)
 \raggedright
 
 \newpage
+
+# Required R Packages
+```{r message=FALSE}
+library(dplyr)
+library(data.table)
+library(astsa)
+library(forecast)
+```
+
 
 # Introduction
 
@@ -53,9 +55,10 @@ brick = ts(brick$production, start = 1960, end = 1980, frequency = 12)
 plot(brick)
 ```
 
+Since 1960, brick production has been trending up with clear seasonal fluctuations. A distinct trough is shown in 1979. The random fluctuations seem constant over time. Consider the autocorrelation at various lag time.
 
 ```{r}
-acf2(brick)[1]
+acf(brick)
 ```
 
 ```{r}
