@@ -22,9 +22,10 @@ library(data.table)
 
 # Introduction
 
-Bricks are used for building and pavement all throughout the world. In the USA, bricks were once used as a pavement material, and now it is more widely used as a decorative surface rather than a roadway material.[@ACSbrick] A healthy living environment especially requires the use of the right building material. In general building materials are strongly influencing the indoor climate and quality of living.
+Bricks are used for building and pavement all throughout the world. In the USA, bricks were once used as a pavement material, and now it is more widely used as a decorative surface rather than a roadway material.[@ACSbrick] A healthy living environment especially requires the use of the right building material. In general building materials are strongly influencing the indoor climate and quality of living.[@claybrickassociation]
 
-[@claybrickassociation]
+The aims of this study are to identify and forecast a model best fitting brick production data in the United States. The method of maximum likelihood was used to estimate the parameters and to forecast the number of production in the future. The data is a twenty year period from 1960 to 1980 and was obtained from the Time Series Data library at datamarket.com website. 
+This project is of utmost importance and relevance because bricks are used for building and pavement all throughout the world. Being made from clay and shale, brick is most abundant and natural material on earth. In the USA, bricks were once used as a pavement material, and now it is more widely used as a decorative surface rather than a roadway material. A healthy living environment especially requires the use of the right building material. In general building materials are strongly influencing the indoor climate and quality of living.
 
 # Problem
 
@@ -33,7 +34,6 @@ The complexity of planning and constructing using clay bricks has increased in r
 [@claywienerberger]
 
 # Purpose
-
 
 
 # Result and Discussion
