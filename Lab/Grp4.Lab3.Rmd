@@ -1,0 +1,54 @@
+---
+title: "Lab3"
+author: "Claudius Taylor, Tom Wilson, Junpu Zhao"
+date: "September 15, 2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## lab3
+
+1. For SOI data, calculate the 95% bounds for the autocorrelation.
+
+```{r}
+library(astsa)
+upbound <- 1.96*1/sqrt(length(soi))
+upbound
+lowbound <- -1.96*1/sqrt(length(soi))
+lowbound
+```
+
+
+2. Verify your results in 1 by superimposing those bounds on the corresponding correlogram.
+
+```{r}
+acf(soi, type = "correlation")
+abline(h=1.96/sqrt(459),col="red")
+abline(h=-1.96/sqrt(459),col="red")
+```
+
+3. consider two data sets: oil and gas from astsa package. Are any of these datasets stationary? Why or why not?
+```{r}
+ts.plot(oil)
+acf(oil, type = "correlation")
+ts.plot(gas)
+acf(gas, type = "correlation")
+```
+
+both oil and gas datasets are not stationary, the covariance between any two observations are not only depend on lag h, it also relies on t. In both cases, autocorrelation decreases very slowly with time.
+
+
+4. Apply the transformation $$\nabla logX_t$$ , where $$\nabla y_t = y_t - y_{t-1}$$ to both data sets. Are any of these dataset stationary? Why or why not?
+```{r}
+oil_trans <- diff(log(oil))
+gas_trans <- diff(log(gas))
+```
+
+5. Produce a cross-correlation plot for the transformed data.
+```{r}
+ccf(oil_trans, gas_trans, ylab='CCorrF', type = "correlation")
+```
+

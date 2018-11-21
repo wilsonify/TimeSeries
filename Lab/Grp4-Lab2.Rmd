@@ -1,0 +1,110 @@
+---
+title: "Lab2"
+author: "Claudius Taylor, Tom Wilson, Junpu Zhao"
+date: "9/5/2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# 1. Use the random numbers you generated in the previous lab and create a simple random walk process.
+```{r}
+x10 <- rnorm(10, 0, 1)
+x50 <- rnorm(50, 0, 1)
+x100 <- rnorm(100, 0, 1)
+x1000 <- rnorm(1000, 0, 1)
+
+rw10 <- ts(cumsum(x10))
+rw50 <- ts(cumsum(x50))
+rw100 <- ts(cumsum(x100))
+rw1000 <- ts(cumsum(x1000))
+```
+
+# Estimate the first 10 autocovariance and autocorrelation estimates, and produce a correlogram.
+```{r}
+acf(rw10, 10, type = "covariance"); acf(rw10, 10, type = "correlation")
+acf(rw50, 10, type = "covariance"); acf(rw50, 10, type = "correlation")
+acf(rw100, 10, type = "covariance"); acf(rw100, 10, type = "correlation")
+acf(rw1000, 10, type = "covariance"); acf(rw1000, 10, type = "correlation")
+
+plot(rw10,type='l',lwd=2,col="blue",ylab="Random Walk",frame.plot=FALSE,main = paste("n = ",length(x10)))
+plot(rw50,type='l',lwd=2,col="blue",ylab="Random Walk",frame.plot=FALSE,main = paste("n = ",length(x50)))
+plot(rw100,type='l',lwd=2,col="blue",ylab="Random Walk",frame.plot=FALSE,main = paste("n = ",length(x100)))
+plot(rw1000,type='l',lwd=2,col="blue",ylab="Random Walk",frame.plot=FALSE,main = paste("n = ",length(x1000)))
+
+```
+
+# Does the ACF die if you increase the lag.max to its maximum value? Describe your results
+```{r}
+plot(acf(rw10, lag.max = 7))
+```
+
+## Yes the ACF dies down (i.e does not change) when lag.max reaches its maximum value.
+
+$$x_t = 0.6w_t + 0.3w_{t-1}$$
+# 2. Generate an MA seriesand n = 10, 30, 100, 10000. Produce correlograms and interpret.
+```{r}
+x10 <- rnorm(10, 0, 1)
+x30 <- rnorm(30, 0, 1)
+x100 <- rnorm(100, 0, 1)
+x10000 <- rnorm(10000, 0, 1)
+
+ma10 <- filter(x10, filter = c(0.6, 0.3), method = "convolution", sides = 1, circular = TRUE)
+ma30 <- filter(x30, filter = c(0.6, 0.3), method = "convolution", sides = 1, circular = TRUE)
+ma100 <- filter(x100, filter = c(0.6, 0.3), method = "convolution", sides = 1, circular = TRUE)
+ma10000 <- filter(x10000, filter = c(0.6, 0.3), method = "convolution", sides = 1, circular = TRUE)
+
+acf( ma10
+     ,ylab = 'MA(10)'
+     ,frame.plot=FALSE
+     ,type = "correlation")
+
+acf( ma30
+     ,ylab = 'MA(30)'
+     ,frame.plot=FALSE
+     ,type = "correlation")
+
+acf( ma100
+     ,ylab = 'MA(100)'
+     ,frame.plot=FALSE
+     ,type = "correlation")
+
+acf( ma10000
+     ,ylab = 'MA(10000)'
+     ,frame.plot=FALSE
+     ,type = "correlation")
+```
+
+## As n increase from 10 to 10000, the significance band (ie confidence interval) shrinks. Lag 1 and Lag 2 also exceeds the significance bands at some point.
+
+$$x_t = 0.2w_{t-1} + 0.5w_t + 0.3w_{t+1}$$
+# 3. Generate an MA series and n = 10, 30, 100, 10000. Produce correlograms and interpret.
+```{r}
+ma10 <- filter(x10, filter = c(0.2, 0.5, 0.3), method = "convolution", sides = 2, circular = TRUE)
+ma30 <- filter(x30, filter = c(0.2, 0.5, 0.3), method = "convolution", sides = 2, circular = TRUE)
+ma100 <- filter(x100, filter = c(0.2, 0.5, 0.3), method = "convolution", sides = 2, circular = TRUE)
+ma10000 <- filter(x10000, filter = c(0.2, 0.5, 0.3), method = "convolution", sides = 2, circular = TRUE)
+
+acf( ma10
+     ,ylab = 'MA(10)'
+     ,frame.plot=FALSE
+     ,type = "correlation")
+
+acf( ma30
+     ,ylab = 'MA(30)'
+     ,frame.plot=FALSE
+     ,type = "correlation")
+
+acf( ma100
+     ,ylab = 'MA(100)'
+     ,frame.plot=FALSE
+     ,type = "correlation")
+
+acf( ma10000
+     ,ylab = 'MA(10000)'
+     ,frame.plot=FALSE
+     ,type = "correlation")
+```
+
+# As n increase from 10 to 10000, the significance band (ie confidence interval) shrinks. Lag 1 and Lag 2 also exceeds the significance bands at some point.

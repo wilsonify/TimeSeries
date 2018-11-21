@@ -1,0 +1,68 @@
+---
+title: "Lab4"
+author: "Claudius Taylor, Tom Wilson, Junpu Zhao"
+date: "9/19/2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 1. Fit a cubic polynomial (centered) model to the chicken data and see if it improves the fit. Have the data and the cubic fit in one plot.
+
+
+```{r}
+library(astsa)
+ck  <- chicken - mean(chicken)  # centered
+ck.lm <- lm( chicken ~ poly(ck, 3, raw=TRUE))
+summary(ck.lm)
+AIC(ck.lm)                              
+BIC(ck.lm)
+
+predicted_chicken <- predict(ck.lm)
+predicted_chicken_ts <- ts(predicted_chicken
+                           ,start(chicken)
+                           ,end(chicken)
+                           ,frequency(chicken))
+
+plot(predicted_chicken_ts,main="actual=points, prediction=lines", col = "red")
+points(chicken, col=4)
+
+```
+
+## 2. Generate a signal 
+$$x_t = 1 + 3t + e_t$$, with n = 200 and where  1) $$e_t = N(0,100)$$ 2) $$e_t = 0.3w_t - 0.3w_{(t-1)} + 0.4w_{(t-2)}$$
+
+
+```{r}
+set.seed(123)
+T <- seq(0, 200, length = 200)
+sig1 <- 1 + 3*T + rnorm(200,0,100)
+
+x200 <- rnorm(200)
+coeffs <- c(0.3, -0.3, 0.4)
+et2 <- filter(x200, sides = 1, filter = coeffs)
+sig2 <- 1 + 3*T + et2
+
+par(mfrow=c(2,2))
+sig1.lm <- lm(sig1 ~ rnorm(200,0,1))
+plot(sig1.lm, col=1, lwd=2)
+abline(sig1.lm)
+
+sig2.lm <- lm(sig2 ~ rnorm(200,0,1))
+plot(sig2.lm, col=4, lwd=2)
+abline(sig2.lm)
+```
+
+## 3. For 1 and 2 above, estimate and remove the trend. Examine the acf of the residuals
+
+```{r}
+summary(sig1.lm)
+plot(resid(sig1.lm), type="l", main="Detrended signal-1")
+summary(sig2.lm)
+plot(resid(sig2.lm), type="l", main="Detrended signal-2")
+acf(sig1.lm$residuals)
+acf(sig2.lm$residuals)
+```
+
