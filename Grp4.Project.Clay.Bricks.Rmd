@@ -47,13 +47,13 @@ brick = read.csv(file = data,
                  comment.char = "",
                  header = TRUE,
                  col.names = columnNames)
-brick = ts(brick$production, start = 1956, end = 1994 ,frequency = 12)
-ts.plot(brick)
+brick = ts(brick$production, start = 1960, end = 1980, frequency = 12)
+plot(brick)
 ```
 
 
 ```{r}
-acf(brick)
+acf2(brick)[1]
 ```
 
 ```{r}
