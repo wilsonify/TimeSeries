@@ -20,7 +20,6 @@ library(data.table)
 
 \newpage
 
-
 # Introduction
 
 Bricks are used for building and pavement all throughout the world. In the USA, bricks were once used as a pavement material, and now it is more widely used as a decorative surface rather than a roadway material.[@ACSbrick] A healthy living environment especially requires the use of the right building material. In general building materials are strongly influencing the indoor climate and quality of living.
