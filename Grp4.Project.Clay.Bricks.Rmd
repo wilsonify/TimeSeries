@@ -65,13 +65,16 @@ acf(brick)
 pacf(brick)
 ```
 
-```{r}
-avg_brick <- mean(brick)
-```
+Consider stationarizing this data via first-order differenceing.
+
 
 ```{r}
 dbrick <- diff(brick)
+acf2(dbrick,48)
 ```
+
+Even with the first order of differencing applied, we observe that there is still slow residual decay in the ACF plot at a seasonal lag period of 12. This suggests that a seasonal difference should applied.
+
 
 ```{r}
 acf(dbrick)
