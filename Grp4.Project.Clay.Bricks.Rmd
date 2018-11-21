@@ -70,15 +70,16 @@ Consider stationarizing this data via first-order differenceing.
 
 ```{r}
 dbrick <- diff(brick)
-acf2(dbrick,48)
+acf2(dbrick,48)[1]
 ```
 
-Even with the first order of differencing applied, we observe that there is still slow residual decay in the ACF plot at a seasonal lag period of 12. This suggests that a seasonal difference should applied.
-
+Even with the first order of differencing applied, we observe that there is still slow residual decay in the ACF plot at a seasonal lag period of 12. This suggests that a second order difference should applied.
 
 ```{r}
-acf(dbrick)
+acf2(diff(diff(brick), 12), 48)[1]
 ```
+From the seasonal lag perspective, we can see that the ACF cuts off at the 2nd seasonal lag, while the PACF appears to tail off. This would suggest a SARMA model of (0,2). Within the first seasonal cycle, it can be seen that PACF appears to be cutting off at lag = 3, while the ACF tails off.
+
 # Conclusion
 
 Currently, the use of brick has remained steady, at around seven to nine billion a year, down from the 15 billion used annually during the early 1900s. In an effort to increase demand, the brick industry continues to explore alternative markets and to improve quality and productivity. Fuel efficiency has also improved, and by the year 2025 brick manufacturers may even be firing their brick with solar energy. However, such changes in technology will occur only if there is still a demand for brick.
