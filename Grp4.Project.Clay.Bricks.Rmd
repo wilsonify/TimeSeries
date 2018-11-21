@@ -11,6 +11,8 @@ bibliography: references.bib
 ```{r message=FALSE}
 library(dplyr)
 library(data.table)
+library(astsa)
+library(forecast)
 ```
 \centering
 
