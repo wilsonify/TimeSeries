@@ -7,7 +7,7 @@ date: "12/12/2018"
 output: pdf_document
 ---
 \centering
-![](brick.png)
+![](./images/brick.png)
 \raggedright
 \clearpage
 
