@@ -1,0 +1,95 @@
+---
+title: |
+  | MONTHLY PRODUCTION OF CLAY BRICKS 
+  | Grp4 - Project
+author: "Claudius Taylor, Tom Wilson, Junpu Zhao"
+date: "12/12/2018"
+output: pdf_document
+---
+\centering
+![](brick.png)
+\raggedright
+\clearpage
+
+```{r results='asis', echo=FALSE, include=FALSE,}
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE)
+# library chunks
+library(dplyr)
+library(data.table)
+library(astsa)
+library(forecast)
+```
+
+INTRODUCTION: {-}
+---
+## The aims of this study are to identify and forecast a model best fitting brick production data in the United States. The method of maximum likelihood was used to estimate the parameters and to forecast the number of production in the future. The data is a twenty year period from 1960 to 1980 and was obtained from the Time Series Data library at datamarket.com website. 
+This project is of utmost importance and relevance because bricks are used for building and pavement all throughout the world. Being made from clay and shale, brick is most abundant and natural material on earth. In the USA, bricks were once used as a pavement material, and now it is more widely used as a decorative surface rather than a roadway material. A healthy living environment especially requires the use of the right building material. In general building materials are strongly influencing the indoor climate and quality of living.
+---
+
+\clearpage
+
+```{r}
+# loading the data
+data = ("./data/claybrick.csv")
+columnNames = c("month", "production") 
+brick = read.csv(file = data,
+                 comment.char = "",
+                 header = TRUE,
+                 col.names = columnNames)
+brick = ts(brick$production, start = 1960, end = 1980, frequency = 12)
+plot(brick)
+acf2(brick)
+```
+
+## The graph shows a trend and seasonal variations in the number of coal production every year. A distinct trough is shown in 1979. The random fluctuations seem constant over time.
+
+```{r}
+acf2(diff(brick), 48)
+```
+
+## Even with the first order of differencing, we observe that there is still slow residual decay in the ACF plots at a seasonal lag period of 12. This thus suggest a seasonal difference to be applied.
+
+```{r}
+acf2(diff(diff(brick), 12), 48)
+```
+
+##  From the seasonal lag perspective, we can see that the ACF cuts off at the 2nd seasonal lag, while the PACF appears to tail off. This would suggest a SARMA model of (0,2).
+## Within the first seasonal cycle, it can be seen that PACF appears to be cutting off at lag = 3, while the ACF tails off.
+## Thus a proposed model can be ARMA (3,0) x (0,2)_12 for the differenced time series.
+
+```{r}
+sarima(brick, 3,1,0, 0,1,2, 12)
+```
+
+## Looking at the model diagnostics, we can see that the model does fit fine for earlier lags, although there might still be some outliers in the data with unexplained variance (as shown in the Normal QQ plot, and the standardised residuals).
+
+```{r}
+auto.arima(brick)
+sarima.for(brick, 10, 1,0,3, 0,1,2, 12)
+```
+
+RESULT AND DISCUSSION: {-}
+---
+By using the method of maximum likelihood, the present study identified that the ARMA (,) model fits the 
+---
+
+CONCLUSION: {-}
+---
+Along with the predicted data, there is the prediction bounds (+- 1 standard error represented by the darker gray bands and +-2 standard errors boundaries represented by the lighter gray bands). As the time progresses beyond the first predicted point, the uncertainty increases and thus the prediction boundaries increase in amplitude. 
+---
+
+\clearpage
+
+REFERENCES: {-}
+---
+## https://www.datamarket.com: SOURCE OF DATA
+
+## https://www.eia.gov/totalenergy/data/annual
+
+## www.claybrick.org
+
+## "Trends in Brick Plant Operation,"  The American Ceramic Society Bulletin. 1992, pp.69-74
+  
+## "Brick Manufacturing from Past to Present," The American Ceramic Society Bulletin. May, 1990, pp.807-813
+  
+---
