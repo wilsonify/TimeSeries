@@ -5,7 +5,6 @@ date: "10/19/2018"
 output: pdf_document
 toc: true
 bibliography: references.bib
-#reference_docx: "./Grp4 - Project.docx"
 ---
 
 # Required R Packages
@@ -13,8 +12,14 @@ bibliography: references.bib
 library(dplyr)
 library(data.table)
 ```
+\centering
 
  [![Pile of Clay](./images/clay.jpg)](https://raw.githubusercontent.com/wilsonify/TimeSeries/master/images/clay.jpg)
+
+\raggedright
+
+\newpage
+
 
 # Introduction
 
