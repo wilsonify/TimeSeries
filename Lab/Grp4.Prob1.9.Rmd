@@ -1,0 +1,28 @@
+---
+title: "Prob1.9"
+author: "Claudius Taylor, Tom Wilson, Junpu Zhao"
+date: "9/13/2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### 1.9 A time series with a periodic component can be constructed from 
+$$x_t = U_1 sin(2 \pi \omega_0 t) + U_2 cos(2 \pi \omega_0 t)$$
+
+### where U1 and U2 are independent random variables with zero means and 
+$$E(U_1^2) = E(U_1^2) = \sigma^2$$ 
+
+### The constant $\omega_0$ determines the period or time it takes the process to make one complete cycle. Show that this series is weakly stationary with autocovariance function
+$$\gamma (h) = \sigma^2 cos(2 \pi \omega_0 h)$$
+```{r}
+U1 <- rnorm(100,0,1)
+U2 <- rnorm(100,0,1)
+omega_0 <- 1/50
+xt <- U1*sin(2*pi*omega_0*1:100) + U2*cos(2*pi*omega_0*1:100) # t = 1:100
+acf(xt, type = "covariance")
+```
+
+# From the plot we can conclude this series is weakly stationary, because after Lag0, subsequent Lags die out quickly.

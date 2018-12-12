@@ -1,0 +1,68 @@
+---
+title: "Prob3.42"
+author: "Claudius Taylor, Tom Wilson, Junpu Zhao"
+date: "12/5/2018"
+output: pdf_document
+---
+
+```{r results='asis', echo=FALSE, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE)
+library(TSA)
+library(dplyr)
+library(astsa)
+library(tseries)
+library(forecast)
+```
+
+## Fit a seasonal ARIMA model of your choice to the unemployment data in UnempRate. Use the estimated model to forecast the next 12 months.
+
+```{r}
+data(UnempRate)
+plot(UnempRate)
+```
+ 
+# Between 1948 and 2017 there are fluctuations in the unemployment rate, 1983 shows the highest peak in unemployment rate.
+
+```{r}
+# checking for stationarity
+par(mfrow = c(1,2))
+acf(UnempRate) 
+pacf(UnempRate)
+```
+
+## acf decays slowly and pacf cuts off immediately. A sign differencing may be required
+
+```{r}
+# Differencing
+d.UnempRate = diff(UnempRate) 
+acf2(d.UnempRate,48)
+```
+
+# Even with the first order differencing there is still residual decay in the acf plots at seasons (s = 12). This suggest a seasonal difference to be applied.
+
+```{r}
+# Seasonal differencing
+sd.UnempRate = diff(UnempRate,12)
+acf2(UnempRate, max.lag = 48)
+```
+
+# The pattern in the ACF is not indictive of any simple model as the data is showing abnormalities.
+
+```{r}
+auto.arima(UnempRate)
+```
+
+# auto.arima suggest ARIMA (3,0,1) × (2,12)12 model
+
+```{r}
+# checking the fit
+sarima(UnempRate, 3,0,1, 2,1,2, 12)
+```
+ 
+# Majority of the p-values are above the significant levels which suggests a good model.
+
+```{r}
+# forcasting
+sarima.for(UnempRate, 12, 3,0,1, 2,1,2, 12)
+```
+

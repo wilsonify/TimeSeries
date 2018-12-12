@@ -1,0 +1,34 @@
+---
+title: "Lab9"
+author: "Claudius Taylor, Tom Wilson, Junpu Zhao"
+date: "11/2/2018"
+output: pdf_document
+---
+
+```{r results='asis', echo=FALSE, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE)
+library(TSA)
+library(dplyr)
+library(astsa)
+library(tseries)
+```
+
+## Consider the five-year treasury security data tcm5y. Identify the possible orders (p, q) for ARMA(p, q)
+```{r}
+data(tcm) 
+data.5y = tcm[,3]
+plot(data.5y)
+acf(data.5y)
+data.5y.d = diff(data.5y)
+acf2(data.5y.d)[1]
+eacf(data.5y.d)
+
+```
+
+# From the eacf table, possible orders of (p,q) are ARMA(1,2), ARMA(1,1), ARMA(0,3).
+
+
+
+
+
+

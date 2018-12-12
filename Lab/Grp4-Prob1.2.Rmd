@@ -1,0 +1,66 @@
+---
+title: "Problem1.2TomWilson.Rmarkdown"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 1.2 
+Consider a signal-plus-noise model of the general form 
+
+$x_t = s_t + w_t$ , where $w_t$ is Gaussian white noise with $\sigma^2_w = 1$.
+
+Simulate and plot $n = 200$ observations from each of the following two models (Save the data or your code for use in Problem 1.22 ):
+
+(a) $x_t = s_t + w_t$, for $t = 1,...,200$, where 
+
+$$s_t = \begin{cases} 0  , t = 1,...,100 \\
+        10 exp(-\frac{(t-100)}{20} )cos(\frac{2 \pi t}{4})  , t = 101,...,200 \end{cases}$$
+
+
+```{R}
+s = c(rep(0,100) , 10*exp(-(1:100)/20)*cos(2*pi*1:100/4)) 
+x = ts(s + rnorm(200, 0, 1)) 
+plot(x)
+```
+
+(b)
+$x_t = s_t + w_t$, for $t = 1,...,200$, 
+
+where 
+$$ 
+s_t = \begin{cases} 0, t = 1,...,100 \\ 
+      10exp(-\frac{(t-100)}{200} ) cos(\frac{2 \pi t}{4}), t = 101,...,200.
+      \end{cases}
+$$
+```{R}
+s = c(rep(0,100) , 10*exp(-(1:100)/200)*cos(2*pi*1:100/4)) 
+x = ts(s + rnorm(200, 0, 1)) 
+plot(x)
+```
+
+(c) Compare the general appearance of the series (a) and (b) with the earthquake series and the explosion series shown in Figure 1.7. 
+
+In addition, plot (or sketch) and compare the signal modulators (a) $exp(\frac{-t}{20})$ and (b) $exp(\frac{-t}{200})$ , for $t = 1,2,...,100$.
+
+![figure1.7](./figure1.7.png "")
+
+In all cases, the signal is flat around 0 with small amounts of random white noise.
+At time 100 (time 1000 in the case of the earthquake series), there is a change. The signal begins to oscillate significantly. 
+These oscillations decay, in case (a) they are negligible by time 200 while in case (b) they still large at time 200. Similarly, the explosion decays fully by time 2000 while the earthquake still has large oscillations at time 2000.
+
+This behavior is more obvious in the signal modulators below.
+
+```{R}
+s = c(rep(0,100) , exp(-(1:100)/20))
+x = ts(s) 
+plot(x)
+```
+
+```{R}
+s = c(rep(0,100) , exp(-(1:100)/200))
+x = ts(s) 
+plot(x)
+```

@@ -1,0 +1,45 @@
+---
+title: "Prob2.3"
+author: "Claudius Taylor, Tom Wilson, Junpu Zhao"
+date: "9/24/2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Prob2.3 (a) Generate four series that are random walk with drift, (1.4), of length n = 100 with 
+$$\delta = .01$$ and $$\sigma_w = 1$$. Call the data xt for t = 1,...,100. Fit the regression $$x_t = \beta t + w_t$$ using least squares. Plot the data, the true mean function (i.e., $$\mu_t = 0.01 t$$) and the fitted line, 
+$$\hat{x} _t = \hat{\beta} t$$, on the same graph.
+
+```{r}
+set.seed(123)
+par(mfrow=c(2,2), mar=c(2.5,2.5,0,0) + 0.5, mgp=c(1.6,0.6,0)) # set up 
+for (i in 1:4){
+  x = ts(cumsum(rnorm(100,0.01,1)))          # data
+  regx = lm(x~0+time(x), na.action=NULL)    # regression
+  plot(x, ylab='Random Walk w Drift')       # plots
+  abline(a=0, b=0.01, col=2, lty=2)          # true mean (red - dashed)
+  abline(regx, col=4)                       # fitted line (blue - solid)
+}
+```
+
+## (b) Generate four series of length n = 100 that are linear trend plus noise, say 
+$$y_t =.01t + w_t$$, where t and wt are as in part(a). Fit the regression $$y_t = \beta t + w_t$$ using least squares. Plot the data, the true mean function (i.e., $$\mu_t = 0.01 t$$) and the fitted line, $$\hat{y} _t = \hat{\beta} t$$, on the same graph.
+
+```{r}
+set.seed(124)
+par(mfrow=c(2,2), mar=c(2.5,2.5,0,0) + 0.5, mgp=c(1.6,0.6,0)) # set up 
+for (i in 1:4){
+  x = ts(rnorm(100,0.01,1))                  # data
+  regx = lm(x~0+time(x), na.action=NULL)    # regression
+  plot(x, ylab='linear trend plus noise')   # plots
+  abline(a=0, b=0.01, col=2, lty=2)          # true mean (red - dashed)
+  abline(regx, col=4)                       # fitted line (blue - solid)
+}
+```
+
+## (c) Comment (what did you learn from this assignment).
+
+# Linear trend with noise signals shows a deterministic (cyclical) trend, whereas the fit in the random walk with drift shows a stochastic linear trend . 

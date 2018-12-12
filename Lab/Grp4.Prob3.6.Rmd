@@ -1,0 +1,23 @@
+---
+title: "Prob3.6"
+author: "Claudius Taylor, Tom Wilson, Junpu Zhao"
+date: "10/11/2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## For the AR(2) model given by $$x_t = -0.9x_{t-2} + w_t$$, find the roots of the autoregressive polynomial, and then plot the ACF, $\rho(h)$.
+
+```{r}
+z = c(1, 0.9) # coefficients of the polynomial
+roots = Mod(polyroot(z))
+roots
+
+y = ARMAacf(ar=c(0,-0.9), ma=0, 100)
+plot(y, type = "h", ylab = "ACF(2) model", xlab = "lag")
+abline(h=0)
+```
+

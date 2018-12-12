@@ -1,0 +1,30 @@
+---
+title: "Prob2.11"
+author: "Claudius Taylor, Tom Wilson, Junpu Zhao"
+date: "9/26/2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Use two different smoothing techniques described in Section 2.3 to estimate the trend in the global temperature series globtemp. Comment.
+
+```{r}
+library(astsa)
+plot(globtemp)
+lines(lowess(globtemp), lwd=2, col=4) # lowess method
+lines(lowess(globtemp), lty=2, lwd=2, col=2)
+```
+
+```{r}
+plot(globtemp)
+  lines(smooth.spline(time(globtemp), globtemp), lwd=2, col=4) # Smoothing Splines method
+  lines(smooth.spline(time(globtemp), globtemp), lty=2, lwd=2, col=2)
+```
+
+# The two smoothing techniques used Lowess and Smoothing Splines came out to be almost similar. Both plots show an upward trend. There is a drop in temperature between 1900-1920 and a significant spike in temperature in the 1940s. 
+
+
+

@@ -1,0 +1,40 @@
+---
+title: "Lab7"
+author: "Claudius Taylor, Tom Wilson, Junpu Zhao"
+date: "10/17/2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 1. Simulate an MA(3). Is it invertible? What do you notice about the pattern of the ACF?
+
+```{r}
+ma3 = arima.sim(list(order=c(0,0,3), ma= rep(0.9,3)), n=100)
+plot(ma3, type = "l", main = "Simulated MA(3) data")
+z = c(1,-0.9,-0.9,-0.9)
+Mod(polyroot(z)) 
+acf(ma3, lag.max = "m", main ="ACF for simulated sample data")
+```
+
+# The ma3 model is NOT invertible because only 2 of its roots exceeds 1. All of its roots should exceed 1 for invertibility. The pattern of the ACF as we expect falls off after lag 3 and it is non-stationary as some lags exceed the significant bound.
+
+## 2. Analyze the percentage changes in quarterly personal disposable income for the US, 1970 to 2010. What model can you propose?
+
+```{r}
+library(forecast)
+library(fpp)
+data(usconsumption)
+income <- ts(usconsumption[, 2],start=1970:2010,frequency = 4)
+ts.plot(income)
+acf(income)
+
+d.income <- diff(income)
+ts.plot(d.income)
+acf(d.income)
+```
+
+# Quarterly personal disposable income for the US, 1970 to 2010 is stationary. It can be modeled as a random walk. Changes in quarterly personal disposable income for the US, 1970 to 2010 are non-stationary at lag=1. It can be modeled as a moving average(1).
+

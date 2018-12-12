@@ -1,0 +1,40 @@
+---
+title: "Problem 1.5"
+author: "Claudius Taylor, Tom Wilson, Junpu Zhao"
+date: "9/11/2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Consider a signal-plus-noise model of the general form
+$x_t = s_t + w_t$ , where $w_t$ is Gaussian white noise with $\sigma^2_w = 1$
+$$x_1 = s_1 + w_1$$, for $$t = 1,...,200$$, where
+$$s_1 = \begin{cases} 0 , t = 1,...,100 \ 10 exp(-\frac{(t-100)}{20} )cos(\frac{2 \pi t}{4}) , t = 101,...,200 \end{cases}$$
+$$x_2 = s_2 + w_2$$, for $$t = 1,...,200$$, where
+$$s_2 = \begin{cases} 0 , t = 1,...,100 \ 10 exp(-\frac{(t-100)}{200} )cos(\frac{2 \pi t}{4}) , t = 101,...,200 \end{cases}$$
+
+# (a) Compute and plot the mean functions 
+```{r}
+s1 = c(rep(0,100) , 10*exp(-(1:100)/20)*cos(2*pi*1:100/4)) 
+x1 = ts(s1 + rnorm(200, 0, 1)) 
+mean(x1)
+plot(x1)
+
+
+s2 = c(rep(0,100) , 10*exp(-(1:100)/200)*cos(2*pi*1:100/4)) 
+x2 = ts(s2 + rnorm(200, 0, 1)) 
+mean(x2)
+plot(x2)
+```
+
+# (b) Calculate the autocovariance functions
+```{r}
+acf1 = acf(x1, type = "covariance")
+acf2 = acf(x2, type = "covariance")
+```
+
+
+

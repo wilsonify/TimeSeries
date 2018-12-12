@@ -1,0 +1,62 @@
+---
+title: "Lab12"
+author: "Claudius Taylor, Tom Wilson, Junpu Zhao"
+date: "12/5/2018"
+output: pdf_document
+---
+
+```{r results='asis', echo=FALSE, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE)
+library(TSA)
+library(dplyr)
+library(astsa)
+library(tseries)
+library(forecast)
+```
+
+## Fit a seasonal ARIMA model of your choice to the chicken price data in chicken. Check the fit and use the estimated model to forecast the next 12 months.
+
+```{r}
+data(chicken)
+plot(chicken)
+```
+
+# From 2002 to 2016, chicken has an upward trend with some fluctuations.
+
+```{r}
+# checking for stationarity
+par(mfrow=c(1,2))
+acf(chicken, lag.max = 45)
+pacf(chicken, lag.max = 45)
+```
+
+# acf decays slowly and pacf cuts off immediately. A sign differencing may be required.
+
+```{r}
+# Differencing
+d.chicken = diff(chicken)
+acf2(d.chicken)
+```
+
+# After differencing, the acf oscillates with a frequency of 12, pacf cuts off after 12 in the season (s = 12)
+
+```{r}
+# Seasonal differencing
+sd.chicken = diff(chicken, 12)
+acf2(sd.chicken)
+```
+
+# After seasonal differencing, acf decays slowly and pacf cuts off after lag 2. Therefore ARIMA (2,1,0) × (1,0,0)12 is suggested.
+
+```{r}
+# checking the fit
+sarima(chicken, 2,1,0, 1,0,0, 12)
+```
+ 
+# Good fit, p-values all lie above the significant level
+
+```{r}
+# forcasting
+sarima.for(chicken, 12, 2,1,0, 1,0,0, 12)
+```
+

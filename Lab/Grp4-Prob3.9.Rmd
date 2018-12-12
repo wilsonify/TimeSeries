@@ -1,0 +1,57 @@
+---
+title: "Prob3.9"
+author: "Claudius Taylor, Tom Wilson, Junpu Zhao"
+date: "10/17/2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 1. Generate n = 100 observations from each of the three models discussed in Problem 3.8. Compute the sample ACF for each model and compare it to the theoretical values. Compute the sample PACF for each of the generated series and compare the sample ACFs and PACFs with the general results given in Table 3.1.
+
+```{r }
+theta1 = 0.9
+phi1 = 0.6
+# ARMA(1,1) model
+sim11 = arima.sim(list(ar = c(phi1), ma = c(theta1)), n = 100)
+
+acf11 = ARMAacf(ar = c(0.6), ma = c(0.9), 24)
+pacf11 = ARMAacf(ar = c(0.6), ma = c(0.9), 24, pacf = TRUE)
+
+par(mfrow=c(2,2))
+plot(0:24, acf11, type = "h", xlab = "lag", ylim = c(-1,1), main = "True ACF for ARMA(1,1)"); abline(h=0)
+plot(pacf11, type = "h", xlab = "lag", ylim = c(-1,1), main = "True PACF for ARMA(1,1)"); abline(h=0)
+
+acf(sim11, lag.max = 24, main = "Sample ACF for ARMA(1,1)")
+acf(sim11, lag.max = 24, main = "Sample PACF for ARMA(1,1)", type = "partial")
+
+# ARMA(1,0) model
+sim10 = arima.sim(list(ar = c(phi1)), n = 100)
+
+acf10 = ARMAacf(ar = c(0.6), ma = 0, 24)
+pacf10 = ARMAacf(ar = c(0.6), ma = 0, 24, pacf = TRUE)
+
+par(mfrow=c(2,2))
+plot(0:24, acf10, type = "h", xlab = "lag", ylim = c(-1,1), main = "True ACF for ARMA(1,0)"); abline(h=0)
+plot(pacf10, type = "h", xlab = "lag", ylim = c(-1,1), main = "True PACF for ARMA(1,0)"); abline(h=0)
+
+acf(sim10, lag.max = 24, main = "Sample ACF for ARMA(1,0)")
+acf(sim10, lag.max = 24, main = "Sample PACF for ARMA(1,0)", type = "partial")
+
+# ARMA(0,1) model
+sim01 = arima.sim(list(ma = c(theta1)), n = 100)
+
+acf01 = ARMAacf(ar = 0, ma = c(0.9), 24)
+pacf01 = ARMAacf(ar = 0, ma = c(0.9), 24, pacf = TRUE)
+
+par(mfrow=c(2,2))
+plot(0:24, acf01, type = "h", xlab = "lag", ylim = c(-1,1), main = "True ACF for ARMA(0,1)"); abline(h=0)
+plot(pacf01, type = "h", xlab = "lag", ylim = c(-1,1), main = "True PACF for ARMA(0,1)"); abline(h=0)
+
+acf(sim01, lag.max = 24, main = "Sample ACF for ARMA(0,1)")
+acf(sim01, lag.max = 24, main = "Sample PACF for ARMA(0,1)", type = "partial")
+
+```
+
