@@ -795,9 +795,9 @@
         Q      = R[t] + V
         A      = R[t]/Q
         m[t]   = a[t]+A*(y[t]-f)
-        C[t]   = R[t]-Q*A**2
+        C[t]   = R[t]-Q*A^2
         B[t-1] = C[t-1]/R[t]
-        H[t-1] = C[t-1]-R[t]*B[t-1]**2
+        H[t-1] = C[t-1]-R[t]*B[t-1]^2
         llike  = llike + dnorm(y[t],f,sqrt(Q),log=TRUE) }
       mm[n] = m[n]; CC[n] = C[n]
       x[n]  = rnorm(1,m[n],sqrt(C[n]))
