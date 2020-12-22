@@ -22,32 +22,32 @@
     pairs(cbind(Mortality=cmort, Temperature=tempr, Particulates=part))
 
     #  Regression
-    temp  = tempr-mean(tempr)  # center temperature
-    temp2 = temp^2             # square it
-    trend = time(cmort)        # time
+    temp <- tempr-mean(tempr)  # center temperature
+    temp2 <- temp^2             # square it
+    trend <- time(cmort)        # time
 
-    fit = lm(cmort~ trend + temp + temp2 + part, na.action=NULL)
+    fit <- lm(cmort~ trend + temp + temp2 + part, na.action=NULL)
 
     summary(fit)       # regression results
     summary(aov(fit))  # ANOVA table   (compare to next line)
     summary(aov(lm(cmort~cbind(trend, temp, temp2, part)))) # Table 2.1
 
-    num = length(cmort)                                     # sample size
+    num <- length(cmort)                                     # sample size
     AIC(fit)/num - log(2*pi)                                # AIC
     BIC(fit)/num - log(2*pi)                                # BIC
     # AIC(fit, k=log(num))/num - log(2*pi)                  # BIC (alt method)
-    (AICc = log(sum(resid(fit)^2)/num) + (num+5)/(num-5-2)) # AICc
+    (AICc <- log(sum(resid(fit)^2)/num) + (num+5)/(num-5-2)) # AICc
 
     #Examples 2.3
 
-    fish = ts.intersect(rec, soiL6=lag(soi,-6), dframe=TRUE)
+    fish <- ts.intersect(rec, soiL6=lag(soi, -6), dframe=TRUE)
     summary(fit <- lm(rec~soiL6, data=fish, na.action=NULL))
     tsplot(fish$rec, ylim=c(0,111))  # plot the data and the fitted values (not shown in text)
     lines(fitted(fit), col=2)
 
     #Examples 2.4 and 2.5
 
-    fit = lm(chicken~time(chicken), na.action=NULL) # regress chicken on time
+    fit <- lm(chicken~time(chicken), na.action=NULL) # regress chicken on time
     par(mfrow=c(2,1))
     tsplot(resid(fit), main="detrended")
     tsplot(diff(chicken), main="first difference")
@@ -79,8 +79,8 @@
 
     #Example 2.9
 
-    dummy = ifelse(soi<0, 0, 1)
-    fish  = ts.intersect(rec, soiL6=lag(soi,-6), dL6=lag(dummy,-6), dframe=TRUE)
+    dummy <- ifelse(soi<0, 0, 1)
+    fish <- ts.intersect(rec, soiL6=lag(soi, -6), dL6=lag(dummy, -6), dframe=TRUE)
     summary(fit <- lm(rec~ soiL6*dL6, data=fish, na.action=NULL))
     attach(fish)
     plot(soiL6, rec)
@@ -92,9 +92,9 @@
     #Example 2.10
 
     set.seed(1000)  # so you can reproduce these results
-    x = 2*cos(2*pi*1:500/50 + .6*pi) + rnorm(500,0,5)
-    z1 = cos(2*pi*1:500/50)
-    z2 = sin(2*pi*1:500/50)
+    x <- 2*cos(2*pi*1:500/50 + .6*pi) + rnorm(500, 0, 5)
+    z1 <- cos(2*pi*1:500/50)
+    z2 <- sin(2*pi*1:500/50)
     summary(fit <- lm(x~0+z1+z2))  # zero to exclude the intercept
     par(mfrow=c(2,1))
     tsplot(x)
@@ -103,12 +103,12 @@
 
     #Example 2.11
 
-    wgts = c(.5, rep(1,11), .5)/12
-    soif = filter(soi, sides=2, filter=wgts)
+    wgts <- c(.5, rep(1, 11), .5)/12
+    soif <- filter(soi, sides=2, filter=wgts)
     tsplot(soi)
     lines(soif, lwd=2, col=4)
     par(fig = c(.75, 1, .75, 1), new = TRUE) # the insert
-    nwgts = c(rep(0,20), wgts, rep(0,20))
+    nwgts <- c(rep(0, 20), wgts, rep(0, 20))
     plot(nwgts, type="l", ylim = c(-.02,.1), xaxt='n', yaxt='n', ann=FALSE)
 
     #Example 2.12
