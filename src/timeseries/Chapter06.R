@@ -571,7 +571,7 @@
 
     #Example 6.22
 
-    y = as.matrix(flu); num = length(y); nstate = 4;
+    y = as.matrix(flu); num = length(y); nstate = 4
     M1 = as.matrix(cbind(1,0,0,1))  # obs matrix normal
     M2 = as.matrix(cbind(1,0,1,1))  # obs matrix flu epi
     prob = matrix(0,num,1); yp = y  # to store pi2(t|t-1) & y(t|t-1)

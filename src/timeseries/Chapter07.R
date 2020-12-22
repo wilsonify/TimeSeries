@@ -435,8 +435,8 @@
     abline(h=qf(.999, 2*p.dim, 2*(2*N-p.dim-1)))
 
     # Equal P
-    kd    = kernel("daniell",m);
-    u     = Re(rowSums(eq.Pf*Conj(eq.Pf))/(N-1))
+    kd    = kernel("daniell",m)
+u     = Re(rowSums(eq.Pf*Conj(eq.Pf))/(N-1))
     feq.P = kernapply(u, kd, circular=TRUE)
     u     = Re(rowSums(ex.Pf*Conj(ex.Pf))/(N-1))
     fex.P =	kernapply(u, kd, circular=TRUE)
@@ -502,7 +502,7 @@
     cov.ex     = var(cbind(ex.P, ex.S))
     cov.pooled = (cov.ex + cov.eq)/2
 
-    means.eq   =  colMeans(cbind(eq.P,eq.S));
+    means.eq   =  colMeans(cbind(eq.P,eq.S))
     means.ex   =  colMeans(cbind(ex.P,ex.S))
     slopes.eq  = solve(cov.pooled, means.eq)
     inter.eq   = -sum(slopes.eq*means.eq)/2
