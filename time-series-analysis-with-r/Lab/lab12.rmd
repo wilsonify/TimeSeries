@@ -1,0 +1,49 @@
+---
+title: "Lab 12"
+author: "Claudius Taylor, Tom Wilson, Junpu Zhao"
+date: "11/28/2018"
+output: pdf_document
+---
+
+```{r message=FALSE}
+library(tidyverse)
+library(forecast)
+library(astsa)
+```
+
+Fit a seasonal ARIMA model of your choice to the chicken price data in chicken. 
+
+Check the fit and use the estimated model to forecast the next 12 months.
+
+```{r}
+ts.plot(chicken)
+```
+From 2002 to 2016, chicken has been trending up, with some flucuations.
+
+```{r}
+acf2(chicken,max.lag = 50)[1]
+```
+acf trails off slowly. pacf cuts off immediately.
+
+```{r}
+dchicken <- diff(chicken)
+acf2(dchicken,max.lag = 50)[1]
+```
+
+after differencing, the acf oscillates with a frequency of 12. pacf cuts off after 12.
+This suggests that the seasonal parameter, s, is 12.
+```{r}
+sdchicken <- diff(chicken,12)
+acf2(sdchicken,max.lag = 50)
+```
+after seasonal differencing, acf oscilates more slowly and decays slowly.
+pacf cuts off after 1.
+
+```{R}
+sarima(chicken, 2,1,0, 1,0,0, 12)
+```
+
+
+```{R}
+auto.arima(chicken)
+```
